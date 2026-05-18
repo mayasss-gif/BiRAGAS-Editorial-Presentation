@@ -72,7 +72,11 @@ python3 -m http.server 8000
 # → http://localhost:8000/
 ```
 
-## To deploy on GitHub Pages (matches BiRAGAS-Editorial-Issue-01 pattern)
+## Live URL
+
+**https://mayasss-gif.github.io/BiRAGAS-Editorial-Presentation/**
+
+## Deployment commands used (for reference)
 
 ```bash
 cd "/Users/mohamadammarayass/Desktop/Ayass _ Strategic Planning/Videos/Commercials/05.17.2026/Presentation"
