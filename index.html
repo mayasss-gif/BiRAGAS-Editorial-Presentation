@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920, initial-scale=1">
+<title>BiRAGAS Editorial · Investors Technical Playbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F4EFE7; --paper-deep:#E8E0CF; --paper-soft:#FAF6EE;
+  --ink:#0F0F0F; --ink-soft:#2A2A2A; --rule:#11111122;
+  --red:#E63946; --red-deep:#B82C36;
+  --t1:#E63946; --t2:#0F0F0F; --t3:#1E40AF; --mustard:#D4A017;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--paper);color:var(--ink);font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.55;overflow:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:200;opacity:0.42;mix-blend-mode:multiply;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.08 0 0 0 0 0.07 0 0 0 0 0.06 0 0 0 0.55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");background-size:300px 300px}
+
+/* ───── deck shell ───── */
+.deck{position:fixed;inset:0;display:flex;flex-direction:column}
+.masthead{flex-shrink:0;background:var(--ink);color:var(--paper);padding:10px 36px;display:flex;justify-content:space-between;align-items:center;gap:24px;font-family:"DM Mono",ui-monospace,monospace;font-size:12px;letter-spacing:0.22em;text-transform:uppercase;z-index:50;position:relative}
+.masthead .brand{display:flex;gap:18px;align-items:center}
+.masthead .brand .b{font-family:"Fraunces";font-style:italic;font-variation-settings:"opsz" 96,"wght" 700,"SOFT" 50,"WONK" 1;font-size:22px;text-transform:none;letter-spacing:-0.02em;color:var(--paper)}
+.masthead .brand .b .dot{color:var(--red)}
+.masthead .meta{color:#e8e0cfaa}
+.masthead .controls{display:flex;gap:10px}
+.btn{background:transparent;color:var(--paper);border:1px solid #ffffff55;padding:5px 12px;font-family:"DM Mono";font-size:11px;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;transition:all 0.18s}
+.btn:hover{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.btn.on{background:var(--red);color:var(--paper);border-color:var(--red)}
+.btn .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor;margin-right:6px;vertical-align:middle}
+.btn.on .dot{background:var(--paper);animation:blink 1.2s steps(2) infinite}
+@keyframes blink{50%{opacity:0.2}}
+
+.stage{flex:1;position:relative;overflow:hidden}
+.slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity 0.5s ease}
+.slide.active{opacity:1;visibility:visible}
+
+.footer{flex-shrink:0;background:var(--paper-deep);border-top:1px solid var(--ink);padding:10px 36px;display:flex;align-items:center;gap:24px;font-family:"DM Mono";font-size:12px;letter-spacing:0.18em;text-transform:uppercase;z-index:50}
+.footer .nav-btn{background:var(--ink);color:var(--paper);border:none;padding:6px 16px;font-family:"DM Mono";font-size:14px;letter-spacing:0.18em;cursor:pointer;transition:background 0.18s}
+.footer .nav-btn:disabled{background:#888;cursor:not-allowed}
+.footer .nav-btn:hover:not(:disabled){background:var(--red)}
+.footer .counter{font-family:"Fraunces";font-style:italic;font-variation-settings:"opsz" 36,"wght" 600;font-size:24px;letter-spacing:-0.01em;color:var(--ink);text-transform:none;min-width:120px;text-align:center}
+.footer .counter .of{color:var(--red);margin:0 6px}
+.footer .progress{flex:1;height:4px;background:#0001;position:relative;overflow:hidden}
+.footer .bar{position:absolute;left:0;top:0;height:100%;background:var(--red);transition:width 0.35s ease}
+.footer .scrubber{display:flex;gap:3px;flex-wrap:nowrap}
+.footer .pip{width:8px;height:8px;background:#0002;cursor:pointer;transition:all 0.18s}
+.footer .pip.done{background:var(--ink)}
+.footer .pip.active{background:var(--red);transform:scale(1.4)}
+
+/* ───── slide internals (same as editorial video) ───── */
+.spread{position:relative;width:100%;height:100%;padding:48px 72px 60px}
+.folio{display:flex;justify-content:space-between;align-items:center;font-family:"DM Mono";font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-soft);padding-bottom:18px;border-bottom:1px solid var(--rule)}
+.folio .pill{background:var(--ink);color:var(--paper);padding:3px 10px}
+.folio .pill.accent{background:var(--accent,var(--red))}
+
+.corner{position:absolute;width:36px;height:36px;border:2px solid var(--ink);pointer-events:none}
+.corner.tl{top:36px;left:36px;border-right:none;border-bottom:none}
+.corner.tr{top:36px;right:36px;border-left:none;border-bottom:none}
+.corner.bl{bottom:54px;left:36px;border-right:none;border-top:none}
+.corner.br{bottom:54px;right:36px;border-left:none;border-top:none}
+
+/* OPEN */
+.open-spread{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.open-eyebrow{font-family:"DM Mono";font-size:14px;letter-spacing:0.32em;text-transform:uppercase;color:var(--red);margin-bottom:46px;display:flex;align-items:center;gap:14px}
+.open-eyebrow::before,.open-eyebrow::after{content:"";width:50px;height:1px;background:var(--ink-soft)}
+.open-logo{font-family:"Fraunces";font-variation-settings:"opsz" 144,"wght" 900,"SOFT" 50,"WONK" 1;font-size:clamp(180px,18vw,360px);line-height:0.85;letter-spacing:-0.045em;color:var(--ink);position:relative}
+.open-logo .dot{display:inline-block;width:0.18em;height:0.18em;background:var(--red);border-radius:50%;vertical-align:baseline;margin-left:0.05em;transform:translateY(-0.05em)}
+.open-issue{margin-top:46px;font-family:"DM Mono";font-size:13px;letter-spacing:0.32em;text-transform:uppercase;color:var(--ink-soft);display:flex;gap:24px;flex-wrap:wrap;justify-content:center}
+.open-issue .ck{color:var(--paper);background:var(--ink);padding:3px 10px}
+.open-issue .ck.red{background:var(--red)}
+.open-hint{margin-top:60px;font-family:"Fraunces";font-style:italic;font-variation-settings:"opsz" 36,"wght" 400;font-size:18px;color:var(--ink-soft);opacity:0.8}
+.open-hint kbd{font-family:"DM Mono";font-size:11px;background:var(--ink);color:var(--paper);padding:2px 8px;letter-spacing:0.1em;margin:0 4px}
+
+/* SCALE */
+.scale-spread{display:flex;flex-direction:column;--accent:var(--red)}
+.scale-title{font-family:"Fraunces";font-variation-settings:"opsz" 144,"wght" 460,"SOFT" 30;font-size:clamp(70px,7vw,110px);line-height:0.95;letter-spacing:-0.025em;margin:24px 0 36px}
+.scale-title .ital{font-style:italic;font-variation-settings:"opsz" 144,"wght" 380,"SOFT" 100,"WONK" 1;color:var(--red)}
+.scale-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:50px;flex:1;align-items:center}
+.scale-num{text-align:left;border-left:6px solid var(--ink);padding-left:24px}
+.scale-num:nth-child(2){border-left-color:var(--red)}
+.scale-num .n{font-family:"Fraunces";font-style:italic;font-variation-settings:"opsz" 144,"wght" 700,"SOFT" 100,"WONK" 1;font-size:clamp(220px,22vw,360px);line-height:0.85;color:var(--ink);letter-spacing:-0.04em}
+.scale-num:nth-child(2) .n{color:var(--red)}
+.scale-num .lbl{font-family:"DM Mono";font-size:14px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-soft);margin-top:10px}
+.scale-deck{margin-top:36px;font-family:"Fraunces";font-style:italic;font-variation-settings:"opsz" 96,"wght" 400;font-size:clamp(20px,2vw,32px);line-height:1.32;color:var(--ink-soft);max-width:1300px}
+.scale-deck::before{content:"❡";color:var(--red);font-style:normal;margin-right:10px}
+
+/* TIER BANNER */
+.tier-ban{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:48px 100px;position:relative;height:100%}
+.tier-ban .label{font-family:"DM Mono";font-size:16px;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent);margin-bottom:24px}
+.tier-ban .chapter{font-family:"Fraunces";font-variation-settings:"opsz" 144,"wght" 380,"SOFT" 100,"WONK" 1;font-style:italic;font-size:clamp(80px,10vw,150px);line-height:0.95;letter-spacing:-0.03em;color:var(--ink)}
+.tier-ban .chapter .splash{background:var(--accent);color:var(--paper);padding:0 0.1em;display:inline-block;transform:rotate(-1.5deg)}
+.tier-ban .chapter .ital{font-style:italic;color:var(--accent);font-variation-settings:"opsz" 144,"wght" 420,"SOFT" 100,"WONK" 1}
+.tier-ban .deck{margin-top:42px;font-family:"Fraunces";font-style:italic;font-size:clamp(20px,2vw,30px);line-height:1.4;color:var(--ink-soft);max-width:1300px}
+.tier-ban .deck::before{content:"❡ ";color:var(--accent);font-style:normal}
+.tier-ban .count{margin-top:50px;font-family:"DM Mono";font-size:13px;letter-spacing:0.3em;text-transform:uppercase;color:var(--ink-soft);display:flex;gap:20px}
+.tier-ban .count .pill{background:var(--accent);color:var(--paper);padding:4px 12px}
+.tier-ban .floating-mark{position:absolute;right:80px;top:50%;transform:translateY(-50%);font-family:"Fraunces";font-style:italic;font-variation-settings:"opsz" 144,"wght" 700,"SOFT" 100,"WONK" 1;font-size:clamp(320px,40vw,520px);line-height:0.85;color:var(--accent);opacity:0.13;pointer-events:none}
+
+/* MODULE */
+.mod-spread{display:grid;grid-template-columns:1fr 1.4fr;gap:50px;padding:0 60px;flex:1;align-items:center}
+.mod-spread.flip{grid-template-columns:1.4fr 1fr}
+.mod-spread.flip .mod-numeral-col{order:2}
+.mod-spread.flip .mod-content-col{order:1}
+.mod-page-wrap{display:flex;flex-direction:column;height:100%}
+.mod-page-wrap > .top-bar{padding:36px 60px 18px}
+.mod-numeral-col{position:relative;display:flex;flex-direction:column;justify-content:center}
+.mod-numeral-wrap{position:relative;display:inline-block;align-self:start}
+.mod-block-b1{position:absolute;top:8%;left:-10%;width:88%;height:28%;background:var(--accent);z-index:0;transform:rotate(-2deg)}
+.mod-block-b2{position:absolute;bottom:10%;right:-12%;width:55%;height:24%;background:var(--accent);opacity:0.85;z-index:0;transform:rotate(2deg)}
+.mod-numeral{position:relative;font-family:"Fraunces";font-style:italic;font-variation-settings:"opsz" 144,"wght" 760,"SOFT" 20,"WONK" 1;font-size:clamp(280px,32vw,450px);line-height:0.78;letter-spacing:-0.04em;color:var(--ink);z-index:1;cursor:pointer}
+/* T2 module slides (slides 13–22) — green numerals 01–10 per user request */
+#t2_m1 .mod-numeral,#t2_m2 .mod-numeral,#t2_m3 .mod-numeral,#t2_m4 .mod-numeral,#t2_m5 .mod-numeral,
+#t2_m6 .mod-numeral,#t2_m7 .mod-numeral,#t2_m8 .mod-numeral,#t2_m9 .mod-numeral,#t2_m10 .mod-numeral{color:#1F7A4E}
+.mod-numeral-cap{margin-top:28px;font-family:"DM Mono";font-size:13px;letter-spacing:0.22em;text-transform:uppercase;color:var(--accent);border-top:2px solid var(--accent);padding-top:12px;max-width:430px}
+.mod-numeral-cap em{font-family:"Fraunces";font-style:italic;font-variation-settings:"opsz" 24,"wght" 400;text-transform:none;letter-spacing:0;font-size:17px;display:block;margin-top:6px;color:var(--ink-soft)}
+.mod-content-col{display:flex;flex-direction:column;justify-content:center}
+.mod-eyebrow{font-family:"DM Mono";font-size:12px;letter-spacing:0.24em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:flex;gap:14px;align-items:center}
+.mod-eyebrow::after{content:"";flex:1;height:1px;background:var(--accent);opacity:0.6}
+.mod-name{font-family:"Fraunces";font-variation-settings:"opsz" 144,"wght" 480,"SOFT" 40;font-size:clamp(60px,7vw,96px);line-height:1;letter-spacing:-0.025em;margin-bottom:22px;color:var(--ink);cursor:pointer}
+.mod-name em{font-style:italic;font-variation-settings:"opsz" 144,"wght" 380,"SOFT" 100,"WONK" 1;color:var(--accent)}
+.mod-intro{font-family:"Fraunces";font-style:italic;font-variation-settings:"opsz" 36,"wght" 380;font-size:clamp(18px,1.8vw,26px);line-height:1.35;color:var(--ink-soft);margin-bottom:28px;padding-left:20px;border-left:4px solid var(--accent);max-width:780px}
+.mod-bullets{list-style:none;display:grid;gap:16px;margin-bottom:26px}
+.mod-bullet{display:grid;grid-template-columns:46px 1fr;gap:16px;padding-bottom:14px;border-bottom:1px dotted var(--rule)}
+.mod-bullet:last-child{border-bottom:none}
+.mod-bullet .bnum{font-family:"Fraunces";font-style:italic;font-variation-settings:"opsz" 96,"wght" 700;font-size:40px;line-height:0.9;color:var(--accent)}
+.mod-bullet .lead{font-family:"Fraunces";font-variation-settings:"opsz" 36,"wght" 700;font-size:22px;line-height:1.25;color:var(--ink);margin-bottom:4px;letter-spacing:-0.015em}
+.mod-bullet .body{font-family:"Newsreader";font-size:17px;line-height:1.55;color:var(--ink-soft)}
+.mod-action{font-family:"Fraunces";font-style:italic;font-variation-settings:"opsz" 96,"wght" 500,"SOFT" 100;font-size:clamp(22px,2.2vw,30px);line-height:1.3;color:var(--ink);max-width:780px;border-top:3px solid var(--ink);padding-top:18px}
+.mod-action::before{content:"❡ ";color:var(--accent);font-style:normal}
+
+/* PIPE */
+.pipe-spread{background:var(--ink);color:var(--paper);padding:60px 100px;display:flex;flex-direction:column;justify-content:center;height:100%}
+.pipe-spread .folio{color:var(--paper);border-bottom-color:#fff3}
+.pipe-spread .corner{border-color:var(--paper)}
+.pipe-eyebrow{font-family:"DM Mono";font-size:13px;letter-spacing:0.32em;text-transform:uppercase;color:var(--red);margin:24px 0 20px}
+.pipe-headline{font-family:"Fraunces";font-style:italic;font-variation-settings:"opsz" 144,"wght" 400,"SOFT" 100,"WONK" 1;font-size:clamp(70px,9vw,120px);line-height:0.95;letter-spacing:-0.03em;margin-bottom:46px;color:var(--paper);cursor:pointer}
+.pipe-headline .acc{color:var(--red);font-weight:700}
+.pipe-chain{display:flex;align-items:center;gap:14px;flex-wrap:nowrap;justify-content:flex-start}
+.pipe-node{padding:16px 20px;border:2px solid var(--paper);background:transparent;min-width:120px;text-align:center}
+.pipe-node .idx{font-family:"DM Mono";font-size:11px;letter-spacing:0.22em;color:var(--red);margin-bottom:6px}
+.pipe-node .lbl{font-family:"Fraunces";font-style:italic;font-weight:600;font-size:22px;color:var(--paper);letter-spacing:-0.5px}
+.pipe-arrow{font-family:"DM Mono";font-size:20px;color:var(--red)}
+.pipe-node.dossier{border-color:var(--red);background:rgba(230,57,70,0.12);min-width:160px}
+.pipe-node.dossier .lbl{color:var(--red);font-size:26px}
+.pipe-footer{margin-top:50px;font-family:"DM Mono";font-size:12px;letter-spacing:0.32em;text-transform:uppercase;color:var(--red)}
+
+/* CLOSE */
+.close-spread{background:var(--ink);color:var(--paper);padding:60px 100px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;height:100%}
+.close-spread .folio{color:var(--paper);border-bottom-color:#fff3;width:100%}
+.close-spread .corner{border-color:var(--paper)}
+.close-eyebrow{font-family:"DM Mono";font-size:12px;letter-spacing:0.32em;text-transform:uppercase;color:var(--red);margin:46px 0 50px;display:inline-flex;align-items:center;gap:14px}
+.close-eyebrow::before,.close-eyebrow::after{content:"";width:50px;height:1px;background:var(--red)}
+.close-line{font-family:"Fraunces";font-style:italic;font-variation-settings:"opsz" 144,"wght" 400,"SOFT" 100,"WONK" 1;font-size:clamp(50px,7vw,86px);line-height:1.08;letter-spacing:-0.025em;color:var(--paper);max-width:1500px;cursor:pointer}
+.close-line .strike{text-decoration:line-through;text-decoration-color:var(--red);text-decoration-thickness:4px}
+.close-line.next{margin-top:30px}
+.close-line .red-text{color:var(--red)}
+.close-line .period{display:inline-block;width:0.22em;height:0.22em;background:var(--red);border-radius:50%;transform:translateY(0.06em);margin-left:0.05em}
+.close-tag{margin-top:70px;font-family:"DM Mono";font-size:12px;letter-spacing:0.3em;text-transform:uppercase;color:#ffffff80}
+.close-url{margin-top:14px;font-family:"DM Mono";font-size:14px;letter-spacing:0.22em;color:var(--red)}
+
+/* the "▷ click for narration" hint on a slide */
+.audio-hint{position:absolute;bottom:80px;right:60px;font-family:"DM Mono";font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-soft);opacity:0.65;display:flex;align-items:center;gap:8px}
+.audio-hint::before{content:"▷";color:var(--red);font-size:14px}
+.pipe-spread .audio-hint,.close-spread .audio-hint{color:#ffffffaa}
+
+/* now-playing badge */
+.now-playing{position:fixed;bottom:88px;left:36px;background:var(--ink);color:var(--paper);padding:10px 16px;font-family:"DM Mono";font-size:11px;letter-spacing:0.18em;text-transform:uppercase;border-left:3px solid var(--red);display:flex;align-items:center;gap:10px;opacity:0;transform:translateY(20px);transition:all 0.3s ease;z-index:80;pointer-events:none}
+.now-playing.on{opacity:1;transform:translateY(0)}
+.now-playing .eq{display:inline-flex;gap:2px;height:14px;align-items:end}
+.now-playing .eq span{width:3px;background:var(--red);transform-origin:bottom;animation:eq 0.9s ease-in-out infinite}
+.now-playing .eq span:nth-child(1){height:60%;animation-delay:0s}
+.now-playing .eq span:nth-child(2){height:100%;animation-delay:0.2s}
+.now-playing .eq span:nth-child(3){height:70%;animation-delay:0.4s}
+.now-playing .eq span:nth-child(4){height:90%;animation-delay:0.1s}
+@keyframes eq{0%,100%{transform:scaleY(0.4)}50%{transform:scaleY(1)}}
+</style>
+</head>
+<body>
+<div class="deck">
+  <header class="masthead">
+    <div class="brand">
+      <span class="b">BiRAGAS<span class="dot">.</span></span>
+      <span>EDITORIAL · ISSUE 01 · INVESTORS TECHNICAL PLAYBOOK</span>
+    </div>
+    <div class="meta">MMXXVI · A 32-PAGE PRESENTATION</div>
+    <div class="controls">
+      <button class="btn" id="audio-btn"><span class="dot"></span>AUDIO · OFF</button>
+      <button class="btn" id="auto-btn"><span class="dot"></span>AUTO · OFF</button>
+      <button class="btn" id="fs-btn">⛶ FULLSCREEN</button>
+    </div>
+  </header>
+
+  <div class="stage">
+    <section class="slide active" id="open"  data-label="Cover · The Editorial begins"><div class="spread open-spread">
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="open-eyebrow">A 3-MIN EDITORIAL ISSUE</div>
+  <div class="open-logo">BiRAGAS<span class="dot"></span></div>
+  <div class="open-issue">
+    <span class="ck red">ISSUE 01</span>
+    <span>· INVESTORS TECHNICAL PLAYBOOK ·</span>
+    <span class="ck">MMXXVI</span>
+  </div>
+  <div class="open-hint">Press <kbd>→</kbd> to begin · <kbd>SPACE</kbd> to advance · <kbd>A</kbd> toggle audio</div>
+</div></section>
+<section class="slide" id="scale" data-audio="audio/a01_open.mp3" data-label="Platform overview · 25 · 08 · 03"><div class="spread scale-spread" style="--accent:var(--red)">
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="folio"><div>p. 02 — 03 · BIRAGAS EDITORIAL · 3-MIN ISSUE</div><div><span class="pill" style="background:var(--red)">OVERVIEW</span></div></div>
+  <div class="scale-title">A platform of <span class="ital">twenty-five.</span></div>
+  <div class="scale-nums">
+    <div class="scale-num"><div class="n">25</div><div class="lbl">modules</div></div>
+    <div class="scale-num"><div class="n">08</div><div class="lbl">causal engines</div></div>
+    <div class="scale-num"><div class="n">03</div><div class="lbl">stacked tiers</div></div>
+  </div>
+  <div class="scale-deck">One reasoning engine. Source-linked. Auditable. Causal. Across three stacked tiers and twenty-five modules — a complete biomarker-discovery infrastructure.</div>
+  <div class="audio-hint">click any element to replay narration</div>
+</div></section>
+<section class="slide" id="t1_ban" data-audio="audio/a02_t1_intro.mp3" data-label="Chapter 01 · Causal Stack"><div class="spread tier-ban" style="--accent:var(--t1)">
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="folio"><div>p. — · BIRAGAS EDITORIAL · CHAPTER ONE</div><div><span class="pill" style="background:var(--t1)">TIER ONE</span></div></div>
+  <div class="floating-mark">I</div>
+  <div class="label">CHAPTER ONE · THE FLAGSHIP</div>
+  <div class="chapter">The causal <span class="ital">stack.</span><br>Eight engines.<br>The moat.</div>
+  <div class="deck">Causal inference, Mendelian randomization, in-silico perturbation. The exact evidence the FDA increasingly requires for therapeutic claims.</div>
+  <div class="count"><span class="pill">TIER 01 · 08 ENGINES</span></div>
+  <div class="audio-hint">click any element to replay narration</div>
+</div></section>
+<section class="slide" id="t1_m1" data-audio="audio/t1_m1.mp3" data-label="T1·01 · Causal Calculus"><div class="mod-page-wrap" style="--accent:var(--t1)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 01 · CAUSAL STACK · ENGINE</div>
+      <div><span class="pill" style="background:#E63946">T1 · 01</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread ">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">01</div>
+      </div>
+      <div class="mod-numeral-cap">T1 · 01<em>Causal Calculus</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T1</div>
+      <div class="mod-name">Causal Calculus</div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">Causal model + data layer</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">Interventional calculus on a DAG</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Apply causal calculus rules to a DAG context.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t1_m2" data-audio="audio/t1_m2.mp3" data-label="T1·02 · Causal DAG Builder"><div class="mod-page-wrap" style="--accent:var(--t1)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 01 · CAUSAL STACK · ENGINE</div>
+      <div><span class="pill" style="background:#E63946">T1 · 02</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread flip">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">02</div>
+      </div>
+      <div class="mod-numeral-cap">T1 · 02<em>Causal DAG Builder</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T1</div>
+      <div class="mod-name">Causal DAG Builder</div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">Omics + traits + (opt) MR edges</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">Graph structure learning / constraints</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Build a causal DAG seed from pathway and omics evidence.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t1_m3" data-audio="audio/t1_m3.mp3" data-label="T1·03 · Causality"><div class="mod-page-wrap" style="--accent:var(--t1)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 01 · CAUSAL STACK · ENGINE</div>
+      <div><span class="pill" style="background:#E63946">T1 · 03</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread ">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">03</div>
+      </div>
+      <div class="mod-numeral-cap">T1 · 03<em>Causality</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T1</div>
+      <div class="mod-name">Causality</div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">Multi-omics + traits</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">Causal discovery / effect decomposition</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Execute causality analytics on upstream graphs.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t1_m4" data-audio="audio/t1_m4.mp3" data-label="T1·04 · Centrality"><div class="mod-page-wrap" style="--accent:var(--t1)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 01 · CAUSAL STACK · ENGINE</div>
+      <div><span class="pill" style="background:#E63946">T1 · 04</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread flip">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">04</div>
+      </div>
+      <div class="mod-numeral-cap">T1 · 04<em>Centrality</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T1</div>
+      <div class="mod-name">Centrality</div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">Network (PPI · GRN · pathway)</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">Centrality + bottleneck metrics</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Rank nodes by centrality in a causal graph.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t1_m5" data-audio="audio/t1_m5.mp3" data-label="T1·05 · GWAS · MR"><div class="mod-page-wrap" style="--accent:var(--t1)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 01 · CAUSAL STACK · ENGINE</div>
+      <div><span class="pill" style="background:#E63946">T1 · 05</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread ">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">05</div>
+      </div>
+      <div class="mod-numeral-cap">T1 · 05<em>GWAS · MR</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T1</div>
+      <div class="mod-name">GWAS <em>· MR</em></div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">GWAS + LD-matched summary stats</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">Two-sample MR (IVW / sensitivity)</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Integrate GWAS summary stats with expression.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t1_m6" data-audio="audio/t1_m6.mp3" data-label="T1·06 · Perturbation · Patient"><div class="mod-page-wrap" style="--accent:var(--t1)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 01 · CAUSAL STACK · ENGINE</div>
+      <div><span class="pill" style="background:#E63946">T1 · 06</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread flip">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">06</div>
+      </div>
+      <div class="mod-numeral-cap">T1 · 06<em>Perturbation · Patient</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T1</div>
+      <div class="mod-name">Perturbation <em>· Patient</em></div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">Patient embedding / state model</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">Single-patient counterfactuals</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Run patient-context in silico perturbations.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t1_m7" data-audio="audio/t1_m7.mp3" data-label="T1·07 · Perturbation · Population"><div class="mod-page-wrap" style="--accent:var(--t1)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 01 · CAUSAL STACK · ENGINE</div>
+      <div><span class="pill" style="background:#E63946">T1 · 07</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread ">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">07</div>
+      </div>
+      <div class="mod-numeral-cap">T1 · 07<em>Perturbation · Population</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T1</div>
+      <div class="mod-name">Perturbation <em>· Population</em></div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">Pseudobulk or cohort-level</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">In-silico KO / activation simulation</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Run population-level in silico perturbations.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t1_m8" data-audio="audio/t1_m8.mp3" data-label="T1·08 · SIGNOR"><div class="mod-page-wrap" style="--accent:var(--t1)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 01 · CAUSAL STACK · ENGINE</div>
+      <div><span class="pill" style="background:#E63946">T1 · 08</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread flip">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">08</div>
+      </div>
+      <div class="mod-numeral-cap">T1 · 08<em>SIGNOR</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T1</div>
+      <div class="mod-name">SIGNOR</div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">Priors + (opt) gene lists</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">Literature-anchored path models</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Map directed causal edges for a gene set.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t2_ban" data-audio="audio/a04_t2_intro.mp3" data-label="Chapter 02 · Core Analysis"><div class="spread tier-ban" style="--accent:var(--t2)">
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="folio"><div>p. — · BIRAGAS EDITORIAL · CHAPTER TWO</div><div><span class="pill" style="background:var(--t2)">TIER TWO</span></div></div>
+  <div class="floating-mark">II</div>
+  <div class="label">CHAPTER TWO · THE WORKHORSE</div>
+  <div class="chapter">Ten <span class="ital">production</span> workflows.<br>The commercial entry.</div>
+  <div class="deck">Bulk and single-cell expression, pathway enrichment, multi-omics, gene prioritization, temporal modeling. The analytical bedrock every translational group already buys.</div>
+  <div class="count"><span class="pill">TIER 02 · 10 WORKFLOWS</span></div>
+  <div class="audio-hint">click any element to replay narration</div>
+</div></section>
+<section class="slide" id="t2_m1" data-audio="audio/t2_m1.mp3" data-label="T2·01 · Deconvolution"><div class="mod-page-wrap" style="--accent:var(--t2)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 02 · CORE ANALYSIS · WORKFLOW</div>
+      <div><span class="pill" style="background:#0F0F0F">T2 · 01</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread ">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">01</div>
+      </div>
+      <div class="mod-numeral-cap">T2 · 01<em>Deconvolution</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T2</div>
+      <div class="mod-name">Deconvolution</div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">Bulk RNA-seq (mixed tissue)</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">Reference-based deconvolution</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Deconvolve immune cell types in tumor samples.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t2_m2" data-audio="audio/t2_m2.mp3" data-label="T2·02 · DEG Analysis"><div class="mod-page-wrap" style="--accent:var(--t2)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 02 · CORE ANALYSIS · WORKFLOW</div>
+      <div><span class="pill" style="background:#0F0F0F">T2 · 02</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread flip">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">02</div>
+      </div>
+      <div class="mod-numeral-cap">T2 · 02<em>DEG Analysis</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T2</div>
+      <div class="mod-name">DEG Analysis</div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">Bulk RNA-seq</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">DESeq2 / limma-voom</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Find DEGs between healthy and diseased.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t2_m3" data-audio="audio/t2_m3.mp3" data-label="T2·03 · Gene Prioritization"><div class="mod-page-wrap" style="--accent:var(--t2)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 02 · CORE ANALYSIS · WORKFLOW</div>
+      <div><span class="pill" style="background:#0F0F0F">T2 · 03</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread ">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">03</div>
+      </div>
+      <div class="mod-numeral-cap">T2 · 03<em>Gene Prioritization</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T2</div>
+      <div class="mod-name">Gene Prioritization</div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">Ranked gene lists</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">Score fusion + network priors</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Prioritize genes for drug target discovery.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t2_m4" data-audio="audio/t2_m4.mp3" data-label="T2·04 · GSEA"><div class="mod-page-wrap" style="--accent:var(--t2)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 02 · CORE ANALYSIS · WORKFLOW</div>
+      <div><span class="pill" style="background:#0F0F0F">T2 · 04</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread flip">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">04</div>
+      </div>
+      <div class="mod-numeral-cap">T2 · 04<em>GSEA</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T2</div>
+      <div class="mod-name">GSEA</div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">Expression ranks</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">GSEA / preranked enrichment</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Run GSEA on a ranked gene list.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t2_m5" data-audio="audio/t2_m5.mp3" data-label="T2·05 · Multi-Omics"><div class="mod-page-wrap" style="--accent:var(--t2)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 02 · CORE ANALYSIS · WORKFLOW</div>
+      <div><span class="pill" style="background:#0F0F0F">T2 · 05</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread ">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">05</div>
+      </div>
+      <div class="mod-numeral-cap">T2 · 05<em>Multi-Omics</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T2</div>
+      <div class="mod-name">Multi-Omics</div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">RNA + proteome (+ metabolome)</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">Block fusion + sparse coupling</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Integrate multi-omics for biomarker discovery.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t2_m6" data-audio="audio/t2_m6.mp3" data-label="T2·06 · Pathway Enrichment"><div class="mod-page-wrap" style="--accent:var(--t2)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 02 · CORE ANALYSIS · WORKFLOW</div>
+      <div><span class="pill" style="background:#0F0F0F">T2 · 06</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread flip">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">06</div>
+      </div>
+      <div class="mod-numeral-cap">T2 · 06<em>Pathway Enrichment</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T2</div>
+      <div class="mod-name">Pathway Enrichment</div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">Ranked genes / DE table</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">Over-representation + topology</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Compare pathway alterations across diseases.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t2_m7" data-audio="audio/t2_m7.mp3" data-label="T2·07 · Single-Cell"><div class="mod-page-wrap" style="--accent:var(--t2)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 02 · CORE ANALYSIS · WORKFLOW</div>
+      <div><span class="pill" style="background:#0F0F0F">T2 · 07</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread ">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">07</div>
+      </div>
+      <div class="mod-numeral-cap">T2 · 07<em>Single-Cell</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T2</div>
+      <div class="mod-name">Single-Cell</div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">scRNA-seq counts</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">QC → embedding → cell typing</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Cluster single-cell RNA-seq data.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t2_m8" data-audio="audio/t2_m8.mp3" data-label="T2·08 · Temporal Analysis"><div class="mod-page-wrap" style="--accent:var(--t2)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 02 · CORE ANALYSIS · WORKFLOW</div>
+      <div><span class="pill" style="background:#0F0F0F">T2 · 08</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread flip">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">08</div>
+      </div>
+      <div class="mod-numeral-cap">T2 · 08<em>Temporal Analysis</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T2</div>
+      <div class="mod-name">Temporal Analysis</div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">Time-series expression</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">Differential dynamics + smoothing</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Identify genes that change over time.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t2_m9" data-audio="audio/t2_m9.mp3" data-label="T2·09 · Temporal Granger"><div class="mod-page-wrap" style="--accent:var(--t2)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 02 · CORE ANALYSIS · WORKFLOW</div>
+      <div><span class="pill" style="background:#0F0F0F">T2 · 09</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread ">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">09</div>
+      </div>
+      <div class="mod-numeral-cap">T2 · 09<em>Temporal Granger</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T2</div>
+      <div class="mod-name">Temporal Granger</div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">Multivariate time series</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">Granger · VAR-style screens</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Run temporal Granger with a curated gene list.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t2_m10" data-audio="audio/t2_m10.mp3" data-label="T2·10 · Total RNA Pipeline"><div class="mod-page-wrap" style="--accent:var(--t2)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 02 · CORE ANALYSIS · WORKFLOW</div>
+      <div><span class="pill" style="background:#0F0F0F">T2 · 10</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread flip">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">10</div>
+      </div>
+      <div class="mod-numeral-cap">T2 · 10<em>Total RNA Pipeline</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T2</div>
+      <div class="mod-name">Total RNA Pipeline</div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">Bulk RNA-seq (Salmon quant)</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">tximport → DE → WGCNA → GSEA → ML</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Full total-RNA pipeline from Salmon quant.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t3_ban" data-audio="audio/a06_t3_intro.mp3" data-label="Chapter 03 · Data & Processing"><div class="spread tier-ban" style="--accent:var(--t3)">
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="folio"><div>p. — · BIRAGAS EDITORIAL · CHAPTER THREE</div><div><span class="pill" style="background:var(--t3)">TIER THREE</span></div></div>
+  <div class="floating-mark">III</div>
+  <div class="label">CHAPTER THREE · THE FOUNDATION</div>
+  <div class="chapter">Where the <span class="ital">data</span><br>enters the system.</div>
+  <div class="deck">FASTQ alignment, harmonization, federated cohort retrieval, the CRISPR suite. Once a partner's raw data lives inside BiRAGAS, switching costs compound through their regulatory filings.</div>
+  <div class="count"><span class="pill">TIER 03 · 07 MODULES</span></div>
+  <div class="audio-hint">click any element to replay narration</div>
+</div></section>
+<section class="slide" id="t3_m1" data-audio="audio/t3_m1.mp3" data-label="T3·01 · Cohort Retrieval"><div class="mod-page-wrap" style="--accent:var(--t3)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 03 · DATA & PROCESSING · MODULE</div>
+      <div><span class="pill" style="background:#1E40AF">T3 · 01</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread ">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">01</div>
+      </div>
+      <div class="mod-numeral-cap">T3 · 01<em>Cohort Retrieval</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T3</div>
+      <div class="mod-name">Cohort Retrieval</div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">Cohort + omics (mixed)</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">Federated / warehouse query</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Retrieve patient data for disease X.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t3_m2" data-audio="audio/t3_m2.mp3" data-label="T3·02 · CRISPR Perturb-seq"><div class="mod-page-wrap" style="--accent:var(--t3)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 03 · DATA & PROCESSING · MODULE</div>
+      <div><span class="pill" style="background:#1E40AF">T3 · 02</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread flip">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">02</div>
+      </div>
+      <div class="mod-numeral-cap">T3 · 02<em>CRISPR Perturb-seq</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T3</div>
+      <div class="mod-name">CRISPR Perturb-seq</div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">scRNA with perturbations</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">Differential + program discovery</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Analyze Perturb-seq with guide RNAs.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t3_m3" data-audio="audio/t3_m3.mp3" data-label="T3·03 · CRISPR Screening"><div class="mod-page-wrap" style="--accent:var(--t3)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 03 · DATA & PROCESSING · MODULE</div>
+      <div><span class="pill" style="background:#1E40AF">T3 · 03</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread ">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">03</div>
+      </div>
+      <div class="mod-numeral-cap">T3 · 03<em>CRISPR Screening</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T3</div>
+      <div class="mod-name">CRISPR Screening</div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">Pooled screens</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">Screen normalization + hit calling</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Run DNA CRISPR pooled screening effects.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t3_m4" data-audio="audio/t3_m4.mp3" data-label="T3·04 · CRISPR Amplicon"><div class="mod-page-wrap" style="--accent:var(--t3)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 03 · DATA & PROCESSING · MODULE</div>
+      <div><span class="pill" style="background:#1E40AF">T3 · 04</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread flip">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">04</div>
+      </div>
+      <div class="mod-numeral-cap">T3 · 04<em>CRISPR Amplicon</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T3</div>
+      <div class="mod-name">CRISPR Amplicon</div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">Targeted CRISPR validation</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">Paired end-point / growth models</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Analyze amplicon-seq data for genome edits.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t3_m5" data-audio="audio/t3_m5.mp3" data-label="T3·05 · Data Harmonization"><div class="mod-page-wrap" style="--accent:var(--t3)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 03 · DATA & PROCESSING · MODULE</div>
+      <div><span class="pill" style="background:#1E40AF">T3 · 05</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread ">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">05</div>
+      </div>
+      <div class="mod-numeral-cap">T3 · 05<em>Data Harmonization</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T3</div>
+      <div class="mod-name">Data Harmonization</div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">Multi-study tables</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">ComBat / harmonization</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Harmonize RNA-seq across different platforms.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t3_m6" data-audio="audio/t3_m6.mp3" data-label="T3·06 · FASTQ Processing"><div class="mod-page-wrap" style="--accent:var(--t3)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 03 · DATA & PROCESSING · MODULE</div>
+      <div><span class="pill" style="background:#1E40AF">T3 · 06</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread flip">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">06</div>
+      </div>
+      <div class="mod-numeral-cap">T3 · 06<em>FASTQ Processing</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T3</div>
+      <div class="mod-name">FASTQ Processing</div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">Sequencing reads (FASTQ)</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">Alignment + quant pipeline</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Quality control and process FASTQ files.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="t3_m7" data-audio="audio/t3_m7.mp3" data-label="T3·07 · Perturbation Analysis"><div class="mod-page-wrap" style="--accent:var(--t3)">
+  <div class="top-bar">
+    <div class="folio">
+      <div>TIER 03 · DATA & PROCESSING · MODULE</div>
+      <div><span class="pill" style="background:#1E40AF">T3 · 07</span></div>
+    </div>
+  </div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="mod-spread ">
+    <div class="mod-numeral-col">
+      <div class="mod-numeral-wrap">
+        <div class="mod-block-b1"></div>
+        <div class="mod-block-b2"></div>
+        <div class="mod-numeral">07</div>
+      </div>
+      <div class="mod-numeral-cap">T3 · 07<em>Perturbation Analysis</em></div>
+    </div>
+    <div class="mod-content-col">
+      <div class="mod-eyebrow">MODULE · T3</div>
+      <div class="mod-name">Perturbation Analysis</div>
+      <div class="mod-intro">A discrete, source-linked engine inside the BiRAGAS reasoning stack.</div>
+      <ol class="mod-bullets">
+        <li class="mod-bullet"><div class="bnum">①</div><div>
+          <div class="lead">ASSAY</div>
+          <div class="body">Perturb-seq / targeted</div>
+        </div></li>
+        <li class="mod-bullet"><div class="bnum">②</div><div>
+          <div class="lead">METHOD</div>
+          <div class="body">Perturbation differential models</div>
+        </div></li>
+      </ol>
+      <div class="mod-action">Analyze CRISPR knockout effects.</div>
+    </div>
+  </div>
+  <div class="audio-hint">click numeral or title to replay narration</div>
+</div></section>
+<section class="slide" id="pipe" data-audio="audio/a08_pipeline.mp3" data-label="The end-to-end fold · pipeline"><div class="spread pipe-spread" style="--accent:var(--red)">
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="folio"><div>p. 28 — 29 · BIRAGAS EDITORIAL · THE END-TO-END FOLD</div><div><span class="pill" style="background:var(--red)">CHAINED</span></div></div>
+  <div class="pipe-eyebrow">— ONE ENGINE · END TO END —</div>
+  <div class="pipe-headline">From <span class="acc">FASTQ</span> to FDA-ready causal target <span class="acc">dossier.</span></div>
+  <div class="pipe-chain">
+    <div class="pipe-node"><div class="idx">01</div><div class="lbl">FASTQ</div></div>
+    <div class="pipe-arrow">▶</div>
+    <div class="pipe-node"><div class="idx">02</div><div class="lbl">Harmonize</div></div>
+    <div class="pipe-arrow">▶</div>
+    <div class="pipe-node"><div class="idx">03</div><div class="lbl">DEG</div></div>
+    <div class="pipe-arrow">▶</div>
+    <div class="pipe-node"><div class="idx">04</div><div class="lbl">Pathway</div></div>
+    <div class="pipe-arrow">▶</div>
+    <div class="pipe-node"><div class="idx">05</div><div class="lbl">Causal MR</div></div>
+    <div class="pipe-arrow">▶</div>
+    <div class="pipe-node dossier"><div class="idx">06</div><div class="lbl">DOSSIER</div></div>
+  </div>
+  <div class="pipe-footer">◊ SOURCE-LINKED · AUDITABLE · CAUSAL ◊ EVERY STEP A CITATION</div>
+  <div class="audio-hint">click headline to replay narration</div>
+</div></section>
+<section class="slide" id="close" data-audio="audio/a09_close.mp3" data-label="The Editors' Note · manifesto"><div class="spread close-spread" style="--accent:var(--red)">
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="folio"><div>p. 30 · BIRAGAS EDITORIAL · THE EDITORS' NOTE</div><div><span class="pill" style="background:var(--red)">END</span></div></div>
+  <div class="close-eyebrow">THE EDITORS' NOTE · BIRAGAS · MMXXVI</div>
+  <div class="close-line">We're not building <span class="strike">another AI</span> that finds <em style="color:#fff">associations.</em></div>
+  <div class="close-line next">We're building <span class="red-text">the infrastructure</span><br>that finally tells biology's <em>actual story.</em><span class="period"></span></div>
+  <div class="close-tag">BIRAGAS · AYASS BIOSCIENCE · 2026</div>
+  <div class="close-url">mayasss-gif.github.io/BiRAGAS-Causal-Atlas-III</div>
+</div></section>
+  </div>
+
+  <footer class="footer">
+    <button class="nav-btn" id="prev">←</button>
+    <div class="counter" id="counter">01<span class="of">/</span>32</div>
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <div class="scrubber" id="scrubber"></div>
+    <button class="nav-btn" id="next">→</button>
+  </footer>
+</div>
+
+<audio id="player" preload="auto"></audio>
+
+<div class="now-playing" id="now-playing">
+  <span class="eq"><span></span><span></span><span></span><span></span></span>
+  <span id="np-label">narration</span>
+</div>
+
+<script>
+const slides = [...document.querySelectorAll('.slide')];
+const player = document.getElementById('player');
+const audioBtn = document.getElementById('audio-btn');
+const autoBtn = document.getElementById('auto-btn');
+const fsBtn = document.getElementById('fs-btn');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+const counter = document.getElementById('counter');
+const bar = document.getElementById('bar');
+const scrubber = document.getElementById('scrubber');
+const npLabel = document.getElementById('np-label');
+const nowPlay = document.getElementById('now-playing');
+
+let cur = 0;
+let audioOn = false;
+let autoOn = false;
+const N = slides.length;
+
+// build scrubber pips
+slides.forEach((s, i) => {
+  const pip = document.createElement('div');
+  pip.className = 'pip';
+  pip.title = s.dataset.label || ('slide ' + (i+1));
+  pip.addEventListener('click', () => goTo(i));
+  scrubber.appendChild(pip);
+});
+const pips = [...scrubber.children];
+
+function pad(n) { return String(n).padStart(2, '0'); }
+
+function updateUI() {
+  counter.innerHTML = `${pad(cur+1)}<span class="of">/</span>${pad(N)}`;
+  bar.style.width = `${100*(cur+1)/N}%`;
+  pips.forEach((p, i) => {
+    p.classList.toggle('done', i < cur);
+    p.classList.toggle('active', i === cur);
+  });
+  prevBtn.disabled = cur === 0;
+  nextBtn.disabled = cur === N - 1;
+}
+
+function goTo(i) {
+  if (i < 0 || i >= N) return;
+  slides[cur].classList.remove('active');
+  cur = i;
+  slides[cur].classList.add('active');
+  updateUI();
+  if (audioOn) playSlideAudio();
+}
+
+function playSlideAudio() {
+  const audioPath = slides[cur].dataset.audio;
+  if (!audioPath) {
+    player.pause();
+    nowPlay.classList.remove('on');
+    return;
+  }
+  player.src = audioPath;
+  player.play()
+    .then(() => {
+      const label = slides[cur].dataset.label || 'narration';
+      npLabel.textContent = label;
+      nowPlay.classList.add('on');
+    })
+    .catch(() => { nowPlay.classList.remove('on'); });
+}
+
+audioBtn.addEventListener('click', () => {
+  audioOn = !audioOn;
+  audioBtn.classList.toggle('on', audioOn);
+  audioBtn.innerHTML = `<span class="dot"></span>${audioOn ? 'AUDIO · ON' : 'AUDIO · OFF'}`;
+  if (audioOn) playSlideAudio();
+  else { player.pause(); nowPlay.classList.remove('on'); }
+});
+
+autoBtn.addEventListener('click', () => {
+  autoOn = !autoOn;
+  autoBtn.classList.toggle('on', autoOn);
+  autoBtn.innerHTML = `<span class="dot"></span>${autoOn ? 'AUTO · ON' : 'AUTO · OFF'}`;
+});
+
+fsBtn.addEventListener('click', () => {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+  else document.exitFullscreen();
+});
+
+player.addEventListener('ended', () => {
+  nowPlay.classList.remove('on');
+  if (autoOn) goTo(cur + 1);
+});
+
+prevBtn.addEventListener('click', () => goTo(cur - 1));
+nextBtn.addEventListener('click', () => goTo(cur + 1));
+
+// keyboard
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); goTo(cur + 1); }
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); goTo(cur - 1); }
+  else if (e.key === 'Home') goTo(0);
+  else if (e.key === 'End') goTo(N - 1);
+  else if (e.key === 'a' || e.key === 'A') audioBtn.click();
+  else if (e.key === 'f' || e.key === 'F') fsBtn.click();
+});
+
+// click any title/numeral/headline inside slide to replay this slide's narration
+document.addEventListener('click', (e) => {
+  const t = e.target.closest('.mod-numeral, .mod-name, .pipe-headline, .close-line, .open-logo, .scale-title');
+  if (!t) return;
+  if (!audioOn) {
+    audioOn = true;
+    audioBtn.classList.add('on');
+    audioBtn.innerHTML = `<span class="dot"></span>AUDIO · ON`;
+  }
+  playSlideAudio();
+});
+
+updateUI();
+</script>
+</body></html>
