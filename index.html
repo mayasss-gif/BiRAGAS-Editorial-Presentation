@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=1920, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0F0F0F">
 <title>BiRAGAS Editorial · Investors Technical Playbook</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -175,6 +176,160 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:200;o
 .now-playing .eq span:nth-child(3){height:70%;animation-delay:0.4s}
 .now-playing .eq span:nth-child(4){height:90%;animation-delay:0.1s}
 @keyframes eq{0%,100%{transform:scaleY(0.4)}50%{transform:scaleY(1)}}
+
+/* ====== SIDE-NAV OVERLAYS (always-visible big arrow buttons) ====== */
+.side-nav{position:fixed;top:50%;transform:translateY(-50%);z-index:70;display:flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:50%;background:rgba(15,15,15,0.72);color:var(--paper);border:2px solid rgba(244,239,231,0.45);cursor:pointer;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:background 0.22s ease,border-color 0.22s ease,box-shadow 0.22s ease,transform 0.18s ease,opacity 0.22s ease;font-family:"DM Mono",ui-monospace,monospace;font-size:34px;font-weight:300;line-height:1;padding:0;-webkit-tap-highlight-color:transparent;user-select:none}
+.side-nav .chev{display:block;transform:translateY(-2px)}
+.side-nav:hover:not(:disabled){background:var(--red);border-color:var(--red);box-shadow:0 10px 28px rgba(230,57,70,0.4);transform:translateY(-50%) scale(1.06)}
+.side-nav:active:not(:disabled){transform:translateY(-50%) scale(0.94)}
+.side-nav:disabled{opacity:0.22;cursor:not-allowed;pointer-events:none}
+.side-nav.prev{left:24px}
+.side-nav.next{right:24px}
+.side-nav:focus-visible{outline:3px solid var(--red);outline-offset:4px}
+
+/* ====== ENHANCED FOOTER NAV ====== */
+.footer .nav-btn{min-width:54px;min-height:44px;font-size:20px;padding:10px 22px;display:inline-flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent}
+.footer .pip{width:8px;height:8px;border-radius:50%}
+.footer .pip:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+.btn,.nav-btn,.pip,.side-nav{ -webkit-tap-highlight-color: transparent; }
+.btn:focus-visible,.nav-btn:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+
+/* ====== RESPONSIVE — tablet & smaller (≤900px) ====== */
+@media (max-width: 900px){
+  html,body{font-size:17px}
+  .side-nav{width:56px;height:56px;font-size:28px}
+  .side-nav.prev{left:14px}
+  .side-nav.next{right:14px}
+  .spread{padding:36px 42px 48px}
+  .masthead{padding:8px 22px;font-size:11px}
+  .masthead .brand .b{font-size:18px}
+  .masthead .meta{display:none}
+  .footer{padding:8px 22px;gap:14px}
+  .footer .counter{font-size:18px;min-width:80px}
+  /* OPEN */
+  .open-logo{font-size:clamp(120px,18vw,260px)}
+  /* SCALE — 3 columns become 1 on tablet portrait */
+  .scale-nums{grid-template-columns:repeat(3,1fr);gap:30px}
+  .scale-num .n{font-size:clamp(140px,18vw,260px)}
+  .scale-title{font-size:clamp(48px,7vw,90px)}
+  /* TIER BANNER */
+  .tier-ban{padding:42px 60px}
+  .tier-ban .chapter{font-size:clamp(54px,9vw,110px)}
+  .tier-ban .floating-mark{font-size:clamp(220px,40vw,420px);right:20px}
+  /* MODULE — collapse to 1 column, shrink numerals */
+  .mod-spread,.mod-spread.flip{grid-template-columns:1fr;gap:28px;padding:0 42px}
+  .mod-spread.flip .mod-numeral-col{order:1}
+  .mod-spread.flip .mod-content-col{order:2}
+  .mod-numeral{font-size:clamp(180px,28vw,320px)}
+  .mod-name{font-size:clamp(40px,6vw,80px)}
+  .mod-bullets{gap:14px}
+  /* PIPE */
+  .pipe-spread{padding:42px 60px}
+  .pipe-headline{font-size:clamp(48px,8vw,100px)}
+  .pipe-chain{flex-wrap:wrap;gap:10px;justify-content:flex-start}
+  .pipe-node{min-width:100px;padding:12px 14px}
+  /* CLOSE */
+  .close-spread{padding:42px 60px}
+  .close-line{font-size:clamp(36px,6.5vw,70px)}
+}
+
+/* ====== RESPONSIVE — phone (≤600px) ====== */
+@media (max-width: 600px){
+  html,body{font-size:16px;line-height:1.45}
+  .side-nav{width:46px;height:46px;font-size:24px;background:rgba(15,15,15,0.78);border-width:1.5px}
+  .side-nav.prev{left:8px}
+  .side-nav.next{right:8px}
+  .spread{padding:22px 20px 26px}
+  .corner{width:22px;height:22px;border-width:1.5px}
+  .corner.tl,.corner.tr{top:18px}
+  .corner.tl{left:16px}.corner.tr{right:16px}
+  .corner.bl,.corner.br{bottom:32px}
+  .corner.bl{left:16px}.corner.br{right:16px}
+  .audio-hint{display:none}
+  .folio{font-size:9px;letter-spacing:0.14em;padding-bottom:10px;flex-wrap:wrap;gap:6px}
+  .masthead{padding:8px 14px;font-size:10px;letter-spacing:0.14em}
+  .masthead .brand{gap:8px}
+  .masthead .brand .b{font-size:15px}
+  .masthead .brand span:not(.b){display:none}
+  .masthead .controls{gap:6px}
+  .masthead .controls .btn{padding:5px 8px;font-size:10px;letter-spacing:0.12em}
+  .masthead .controls .btn#fs-btn{display:none}
+  .footer{padding:8px 10px;gap:8px;font-size:10px}
+  .footer .nav-btn{min-width:44px;min-height:42px;font-size:18px;padding:8px 12px}
+  .footer .counter{font-size:14px;min-width:54px}
+  .footer .scrubber{display:none}
+  .now-playing{bottom:74px;left:10px;font-size:10px;padding:6px 10px;letter-spacing:0.14em}
+  /* OPEN */
+  .open-spread{padding:24px 18px}
+  .open-eyebrow{font-size:11px;letter-spacing:0.22em;margin-bottom:24px}
+  .open-eyebrow::before,.open-eyebrow::after{width:24px}
+  .open-logo{font-size:clamp(56px,18vw,120px);line-height:0.9}
+  .open-issue{margin-top:24px;gap:10px;font-size:10px;letter-spacing:0.18em}
+  .open-hint{margin-top:32px;font-size:13px}
+  .open-hint kbd{font-size:10px;padding:2px 6px}
+  /* SCALE — stack 3 numbers vertically on phone */
+  .scale-spread{padding:22px 20px 26px}
+  .scale-title{font-size:clamp(28px,8vw,52px);margin:18px 0 22px}
+  .scale-nums{grid-template-columns:1fr;gap:18px}
+  .scale-num{border-left-width:4px;padding-left:16px}
+  .scale-num .n{font-size:clamp(78px,22vw,130px);line-height:0.85}
+  .scale-num .lbl{font-size:11px;letter-spacing:0.18em;margin-top:4px}
+  .scale-deck{margin-top:24px;font-size:clamp(15px,4vw,20px);line-height:1.32}
+  /* TIER BANNER */
+  .tier-ban{padding:24px 22px}
+  .tier-ban .label{font-size:11px;letter-spacing:0.22em;margin-bottom:14px}
+  .tier-ban .chapter{font-size:clamp(34px,9vw,64px);line-height:1}
+  .tier-ban .deck{margin-top:24px;font-size:clamp(15px,4vw,22px)}
+  .tier-ban .count{margin-top:28px;font-size:10px;letter-spacing:0.2em}
+  .tier-ban .floating-mark{font-size:clamp(180px,55vw,300px);right:0;opacity:0.08;z-index:0}
+  /* MODULE */
+  .mod-page-wrap > .top-bar{padding:22px 20px 10px}
+  .mod-spread,.mod-spread.flip{padding:0 20px;gap:18px}
+  .mod-numeral{font-size:clamp(120px,32vw,200px);line-height:0.82}
+  .mod-block-b1,.mod-block-b2{opacity:0.7}
+  .mod-numeral-cap{margin-top:18px;font-size:11px;letter-spacing:0.16em;padding-top:10px}
+  .mod-numeral-cap em{font-size:14px}
+  .mod-eyebrow{font-size:10px;letter-spacing:0.18em;margin-bottom:10px}
+  .mod-name{font-size:clamp(26px,7.5vw,48px);margin-bottom:16px;line-height:1}
+  .mod-intro{font-size:clamp(15px,4vw,20px);padding-left:14px;border-left-width:3px;margin-bottom:18px}
+  .mod-bullet{grid-template-columns:36px 1fr;gap:12px;padding-bottom:12px}
+  .mod-bullet .bnum{font-size:28px}
+  .mod-bullet .lead{font-size:16px;line-height:1.2}
+  .mod-bullet .body{font-size:14px;line-height:1.5}
+  .mod-action{font-size:clamp(16px,4.2vw,22px);padding-top:14px}
+  /* PIPE */
+  .pipe-spread{padding:22px 20px}
+  .pipe-eyebrow{font-size:10px;letter-spacing:0.22em;margin:14px 0 14px}
+  .pipe-headline{font-size:clamp(32px,9vw,60px);line-height:1;margin-bottom:24px}
+  .pipe-chain{gap:6px}
+  .pipe-node{min-width:0;padding:8px 10px;flex:1 1 28%}
+  .pipe-node .idx{font-size:9px;letter-spacing:0.18em;margin-bottom:3px}
+  .pipe-node .lbl{font-size:14px;letter-spacing:-0.3px}
+  .pipe-node.dossier{min-width:0}
+  .pipe-node.dossier .lbl{font-size:16px}
+  .pipe-arrow{font-size:14px}
+  .pipe-footer{margin-top:24px;font-size:10px;letter-spacing:0.22em}
+  /* CLOSE */
+  .close-spread{padding:32px 22px}
+  .close-eyebrow{font-size:10px;margin:22px 0 22px}
+  .close-eyebrow::before,.close-eyebrow::after{width:28px}
+  .close-line{font-size:clamp(26px,7vw,48px);line-height:1.1}
+  .close-line.next{margin-top:18px}
+  .close-tag{margin-top:36px;font-size:10px}
+  .close-url{font-size:11px;letter-spacing:0.18em}
+}
+@media (max-width: 380px){
+  .masthead .controls .btn#auto-btn{display:none}
+  .pipe-node{flex:1 1 40%}
+}
+@media (orientation: landscape) and (max-height: 500px){
+  .open-logo{font-size:clamp(70px,12vw,140px)}
+  .scale-title{font-size:clamp(32px,5vw,64px)}
+  .scale-num .n{font-size:clamp(64px,12vw,140px)}
+  .tier-ban .chapter{font-size:clamp(40px,6vw,80px)}
+  .mod-numeral{font-size:clamp(120px,22vw,240px)}
+  .mod-name{font-size:clamp(28px,5vw,60px)}
+}
 </style>
 </head>
 <body>
@@ -186,9 +341,9 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:200;o
     </div>
     <div class="meta">MMXXVI · A 32-PAGE PRESENTATION</div>
     <div class="controls">
-      <button class="btn" id="audio-btn"><span class="dot"></span>AUDIO · OFF</button>
-      <button class="btn" id="auto-btn"><span class="dot"></span>AUTO · OFF</button>
-      <button class="btn" id="fs-btn">⛶ FULLSCREEN</button>
+      <button class="btn" id="audio-btn" aria-pressed="false" aria-label="Toggle audio narration"><span class="dot"></span>AUDIO · OFF</button>
+      <button class="btn" id="auto-btn" aria-pressed="false" aria-label="Toggle auto-advance to next slide"><span class="dot"></span>AUTO · OFF</button>
+      <button class="btn" id="fs-btn" aria-label="Toggle fullscreen">⛶ FULLSCREEN</button>
     </div>
   </header>
 
@@ -1207,12 +1362,15 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:200;o
   </div>
 
   <footer class="footer">
-    <button class="nav-btn" id="prev">←</button>
-    <div class="counter" id="counter">01<span class="of">/</span>32</div>
-    <div class="progress"><div class="bar" id="bar"></div></div>
-    <div class="scrubber" id="scrubber"></div>
-    <button class="nav-btn" id="next">→</button>
+    <button class="nav-btn" id="prev" aria-label="Previous slide">←</button>
+    <div class="counter" id="counter" aria-live="polite" aria-atomic="true">01<span class="of">/</span>32</div>
+    <div class="progress" role="progressbar" aria-label="Slide progress"><div class="bar" id="bar"></div></div>
+    <div class="scrubber" id="scrubber" role="tablist" aria-label="Jump to slide"></div>
+    <button class="nav-btn" id="next" aria-label="Next slide">→</button>
   </footer>
+
+  <button class="side-nav prev" id="side-prev" aria-label="Previous slide" type="button"><span class="chev">‹</span></button>
+  <button class="side-nav next" id="side-next" aria-label="Next slide" type="button"><span class="chev">›</span></button>
 </div>
 
 <audio id="player" preload="auto"></audio>
@@ -1230,6 +1388,8 @@ const autoBtn = document.getElementById('auto-btn');
 const fsBtn = document.getElementById('fs-btn');
 const prevBtn = document.getElementById('prev');
 const nextBtn = document.getElementById('next');
+const sidePrev = document.getElementById('side-prev');
+const sideNext = document.getElementById('side-next');
 const counter = document.getElementById('counter');
 const bar = document.getElementById('bar');
 const scrubber = document.getElementById('scrubber');
@@ -1262,6 +1422,8 @@ function updateUI() {
   });
   prevBtn.disabled = cur === 0;
   nextBtn.disabled = cur === N - 1;
+  sidePrev.disabled = cur === 0;
+  sideNext.disabled = cur === N - 1;
 }
 
 function goTo(i) {
@@ -1316,6 +1478,34 @@ player.addEventListener('ended', () => {
 
 prevBtn.addEventListener('click', () => goTo(cur - 1));
 nextBtn.addEventListener('click', () => goTo(cur + 1));
+sidePrev.addEventListener('click', () => goTo(cur - 1));
+sideNext.addEventListener('click', () => goTo(cur + 1));
+
+// Touch swipe navigation (mobile/tablet)
+let _tx = null, _ty = null;
+const SWIPE_THRESHOLD = 55;
+document.addEventListener('touchstart', e => {
+  const t = e.changedTouches[0];
+  _tx = t.clientX; _ty = t.clientY;
+}, {passive: true});
+document.addEventListener('touchend', e => {
+  if (_tx === null) return;
+  const t = e.changedTouches[0];
+  const dx = t.clientX - _tx;
+  const dy = t.clientY - _ty;
+  if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy) * 1.5) {
+    if (dx < 0) goTo(cur + 1); else goTo(cur - 1);
+  }
+  _tx = _ty = null;
+}, {passive: true});
+
+// Reflect aria-pressed on toggle controls
+function syncAria(){
+  audioBtn.setAttribute('aria-pressed', audioOn ? 'true' : 'false');
+  autoBtn.setAttribute('aria-pressed', autoOn ? 'true' : 'false');
+}
+audioBtn.addEventListener('click', syncAria);
+autoBtn.addEventListener('click', syncAria);
 
 // keyboard
 document.addEventListener('keydown', (e) => {
